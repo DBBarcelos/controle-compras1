@@ -1,5 +1,5 @@
 import streamlit as st
-st.set_page_config(page_title="Controle de Compras", layout="centered")
+st.set_page_config(page_title="Controle de Compras", layout="wide")
 
 def main():
     import json
