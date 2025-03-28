@@ -1,10 +1,13 @@
-import streamlit as st
+import streamlit as st  # ✅ IMPORT STREAMLIT PRIMEIRO
+st.set_page_config(page_title="Controle de Compras", layout="centered")  # ✅ PRIMEIRA CHAMADA STREAMLIT
+
+# Agora você pode importar o resto
 import json
 import gspread
 import pandas as pd
 from datetime import datetime
-import locale
 from oauth2client.service_account import ServiceAccountCredentials
+import locale
 import re
 
 # === LOCALE BRASILEIRO ===
