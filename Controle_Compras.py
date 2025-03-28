@@ -10,6 +10,15 @@ def main():
     import locale
     import re
 
+    # === FUNÇÃO AUXILIAR DE FORMATAÇÃO DE MOEDA ===
+    def format_currency(valor):
+        try:
+            return locale.currency(valor, grouping=True)
+        except ValueError:
+            # Formatação personalizada para R$:
+            # Formata usando ponto para separador de milhar e vírgula para decimal
+            return "R$ " + f"{valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    
     # === CONFIGURAR LOCALE ===
     def configurar_locale():
         try:
@@ -18,8 +27,7 @@ def main():
             try:
                 locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil.1252')
             except locale.Error:
-                st.warning("⚠️ Locale não aplicado. Moedas podem aparecer no formato padrão.")
-
+                st.warning("⚠️ Locale não aplicado. Moedas e datas podem aparecer com formatação padrão.")
     configurar_locale()
 
     # === GOOGLE SHEETS AUTH ===
@@ -81,7 +89,7 @@ def main():
             vencimentos.append(venc)
 
         valor_parcela = valor_total / st.session_state.qtd_parcelas
-        parcelas_info = f"{st.session_state.qtd_parcelas}x de {locale.currency(valor_parcela, grouping=True)}"
+        parcelas_info = f"{st.session_state.qtd_parcelas}x de {format_currency(valor_parcela)}\n"
         parcelas_info += "Vencimentos: " + ", ".join([v.strftime("%d/%m/%Y") for v in vencimentos])
         data_pagamento = vencimentos[0]
     else:
@@ -97,7 +105,7 @@ def main():
                 empresa_compradora,
                 data_pedido.strftime("%d/%m/%Y"),
                 forma_pagamento,
-                locale.currency(valor_total, grouping=True) if forma_pagamento != "Boleto" else parcelas_info,
+                format_currency(valor_total) if forma_pagamento != "Boleto" else parcelas_info,
                 data_pagamento.strftime("%d/%m/%Y"),
                 parcelas_info if forma_pagamento == "Boleto" else "-"
             ]
@@ -105,7 +113,7 @@ def main():
             st.success("✅ Compra registrada com sucesso!")
             st.session_state.trigger_rerun = True
 
-    # === EXIBIÇÃO TABELA ===
+    # === EXIBIÇÃO DA TABELA COM DATAS FORMATADAS ===
     st.subheader("📋 Compras Registradas")
     dados = worksheet.get_all_records()
     df = pd.DataFrame(dados)
@@ -124,6 +132,7 @@ def main():
 
         def formatar_vencimentos(texto):
             if isinstance(texto, str) and "Vencimentos:" in texto:
+                # Procura datas no formato ISO ou já formatadas e as força para DD/MM/AAAA
                 datas = re.findall(r"\d{4}-\d{2}-\d{2}|\d{2}/\d{2}/\d{4}", texto)
                 for d in datas:
                     try:
