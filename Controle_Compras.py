@@ -68,7 +68,6 @@ def main():
             valor_parcela = valor_total / st.session_state.qtd_parcelas
             valor_formatado = f"R$ {valor_parcela:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
             parcelas_info = f"{st.session_state.qtd_parcelas}x de {valor_formatado}\\n"
-"
             parcelas_info += "Vencimentos: " + ", ".join([v.strftime("%d/%m/%Y") for v in vencimentos])
             data_pagamento = vencimentos[0]
         else:
