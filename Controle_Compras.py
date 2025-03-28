@@ -5,6 +5,7 @@ from datetime import datetime
 import streamlit as st
 import locale
 import re
+import json
 
 # === LOCALE BRASILEIRO ===
 try:
