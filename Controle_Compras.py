@@ -11,13 +11,16 @@ import locale
 import re
 
 # === LOCALE BRASILEIRO ===
+locale_aplicado = False
 try:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Linux (Streamlit Cloud)
+    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Linux
+    locale_aplicado = True
 except locale.Error:
     try:
         locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil.1252')  # Windows
+        locale_aplicado = True
     except locale.Error:
-        st.warning("⚠️ Não foi possível aplicar formatação local. Moedas e datas podem aparecer com formatação padrão.")
+        pass  # 👈 não chame st.warning aqui ainda!
 
 # Carregar credenciais dos secrets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -55,6 +58,9 @@ if "trigger_rerun" not in st.session_state:
 # === INTERFACE PRINCIPAL ===
 st.set_page_config(page_title="Controle de Compras", layout="centered")
 st.title("📦 Sistema de Controle de Compras")
+
+if not locale_aplicado:
+    st.warning("⚠️ Não foi possível aplicar formatação local. Moedas e datas podem aparecer com formatação padrão.")
 
 st.subheader("Nova Compra")
 fornecedor = st.text_input("Fornecedor")
