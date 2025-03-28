@@ -1,6 +1,7 @@
 import streamlit as st  # ✅ IMPORT STREAMLIT PRIMEIRO
 st.set_page_config(page_title="Controle de Compras", layout="centered")  # ✅ PRIMEIRA CHAMADA STREAMLIT
 
+def main():
 # Agora você pode importar o resto
 import json
 import gspread
@@ -166,3 +167,6 @@ else:
 if st.session_state.trigger_rerun:
     st.session_state.trigger_rerun = False
     st.rerun()
+
+if __name__ == "__main__":
+    main()
