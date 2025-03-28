@@ -81,8 +81,7 @@ def main():
             vencimentos.append(venc)
 
         valor_parcela = valor_total / st.session_state.qtd_parcelas
-        parcelas_info = f"{st.session_state.qtd_parcelas}x de {locale.currency(valor_parcela, grouping=True)}
-"
+        parcelas_info = f"{st.session_state.qtd_parcelas}x de {locale.currency(valor_parcela, grouping=True)}"
         parcelas_info += "Vencimentos: " + ", ".join([v.strftime("%d/%m/%Y") for v in vencimentos])
         data_pagamento = vencimentos[0]
     else:
