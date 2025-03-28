@@ -8,9 +8,12 @@ import re
 
 # === LOCALE BRASILEIRO ===
 try:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-except:
-    locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil.1252')
+    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Linux (Streamlit Cloud)
+except locale.Error:
+    try:
+        locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil.1252')  # Windows
+    except locale.Error:
+        st.warning("⚠️ Não foi possível aplicar formatação local. Moedas e datas podem aparecer com formatação padrão.")
 
 # Carregar credenciais dos secrets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
