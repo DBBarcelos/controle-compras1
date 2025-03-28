@@ -1,11 +1,11 @@
+import streamlit as st
+import json
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from datetime import datetime
-import streamlit as st
 import locale
+from oauth2client.service_account import ServiceAccountCredentials
 import re
-import json
 
 # === LOCALE BRASILEIRO ===
 try:
